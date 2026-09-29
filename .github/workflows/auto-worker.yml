@@ -1,0 +1,28 @@
+name: Auto Generate _worker.js
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create _worker.js from source
+        run: |
+          if [ -f "少年你相信光吗" ]; then
+            cp "少年你相信光吗" _worker.js
+          elif [ -f "明文源吗" ]; then
+            cp "明文源吗" _worker.js
+          fi
+
+      - name: Commit and push if changed
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add _worker.js
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto sync _worker.js" && git push)
